@@ -20,23 +20,19 @@ jobs:
           cd mobile
           npm install --legacy-peer-deps
 
-      - name: Expo Prebuild (iOS native projesini oluştur)
+      - name: Expo Prebuild (iOS native projesini oluştur ve Pods yükle)
         run: |
           cd mobile
-          npx expo prebuild -p ios --clean --no-install
-
-      - name: CocoaPods Yükle (Pod Install)
-        run: |
-          cd mobile/ios
-          echo "export NODE_BINARY=$(command -v node)" > .xcode.env.local
-          cat .xcode.env.local
-          pod install
+          npx expo prebuild -p ios --clean
         env:
-          LANG: en_US.UTF-8
+          CI: 1
 
       - name: Xcode ile İmzasız Derleme Yap
         run: |
           cd mobile/ios
+          # Xcode'un node.js'i bulabilmesi için özel çevre değişkenini ayarla
+          echo "export NODE_BINARY=$(command -v node)" > .xcode.env.local
+          
           echo "Building DeutschFit.xcworkspace..."
           xcodebuild -workspace DeutschFit.xcworkspace \
                      -scheme DeutschFit \
@@ -46,7 +42,8 @@ jobs:
                      CODE_SIGNING_ALLOWED=NO \
                      CODE_SIGNING_REQUIRED=NO \
                      CODE_SIGN_IDENTITY="" \
-                     CODE_SIGNING_PROVISIONING_PROFILE=""
+                     CODE_SIGNING_PROVISIONING_PROFILE="" \
+                     COMPILER_INDEX_STORE_ENABLE=NO
           cd ..
           rm -rf Payload app.ipa
           mkdir Payload
@@ -58,4 +55,3 @@ jobs:
         with:
           name: DeutschFit-unsigned-ipa
           path: mobile/app.ipa
-
