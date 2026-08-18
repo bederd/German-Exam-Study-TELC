@@ -28,6 +28,8 @@ jobs:
       - name: CocoaPods Yükle (Pod Install)
         run: |
           cd mobile/ios
+          echo "export NODE_BINARY=$(command -v node)" > .xcode.env.local
+          cat .xcode.env.local
           pod install
         env:
           LANG: en_US.UTF-8
@@ -56,3 +58,4 @@ jobs:
         with:
           name: DeutschFit-unsigned-ipa
           path: mobile/app.ipa
+
