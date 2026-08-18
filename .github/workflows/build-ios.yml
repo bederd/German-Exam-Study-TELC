@@ -1,4 +1,4 @@
-name: Build Unsigned iOS IPA
+﻿name: Build Unsigned iOS IPA
 
 on:
   workflow_dispatch:
@@ -20,23 +20,25 @@ jobs:
           cd mobile
           npm install --legacy-peer-deps
 
-      - name: Expo Prebuild (iOS native projesini oluştur ve Pods yükle)
+      - name: Expo Prebuild ve Pod Install
         run: |
           cd mobile
           npx expo prebuild -p ios --clean --no-install
           npx pod-install ios
-        env:
-          CI: 1
 
       - name: Xcode ile İmzasız Derleme Yap
         run: |
           cd mobile/ios
-          # Xcode'un node.js'i bulabilmesi için özel çevre değişkenini ayarla
           echo "export NODE_BINARY=$(command -v node)" > .xcode.env.local
           
-          echo "Building DeutschFit.xcworkspace..."
-          xcodebuild -workspace DeutschFit.xcworkspace \
-                     -scheme DeutschFit \
+          WORKSPACE=$(ls -d *.xcworkspace | head -n 1)
+          SCHEME=$(basename "$WORKSPACE" .xcworkspace)
+          
+          echo "Building Workspace: $WORKSPACE with Scheme: $SCHEME"
+          
+          set -o pipefail
+          xcodebuild -workspace "$WORKSPACE" \
+                     -scheme "$SCHEME" \
                      -configuration Release \
                      -sdk iphoneos \
                      -derivedDataPath build \
@@ -44,16 +46,25 @@ jobs:
                      CODE_SIGNING_REQUIRED=NO \
                      CODE_SIGN_IDENTITY="" \
                      CODE_SIGNING_PROVISIONING_PROFILE="" \
-                     COMPILER_INDEX_STORE_ENABLE=NO
-          cd ..
+                     COMPILER_INDEX_STORE_ENABLE=NO | tee xcodebuild.log
+
+      - name: Hata Loglarini Goster
+        if: failure()
+        run: |
+          cd mobile/ios
+          echo "================ XCODEBUILD ERROR LOG ================"
+          tail -n 150 xcodebuild.log
+
+      - name: IPA Dosyasını Paketle ve Indirmeye Sun
+        run: |
+          cd mobile
           rm -rf Payload app.ipa
           mkdir Payload
           cp -r ios/build/Build/Products/Release-iphoneos/*.app Payload/
           zip -r app.ipa Payload
-
-      - name: IPA Dosyasını İndirmeye Sun
+          
+      - name: IPA Yükle
         uses: actions/upload-artifact@v4
         with:
           name: DeutschFit-unsigned-ipa
           path: mobile/app.ipa
-
