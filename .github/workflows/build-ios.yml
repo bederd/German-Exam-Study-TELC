@@ -20,43 +20,31 @@ jobs:
           cd mobile
           npm install --legacy-peer-deps
 
-      - name: Expo Prebuild (iOS projesini oluştur)
+      - name: Expo Prebuild (iOS native projesini oluştur)
         run: |
           cd mobile
-          npx expo prebuild -p ios --clean
+          npx expo prebuild -p ios --clean --no-install
+
+      - name: CocoaPods Yükle (Pod Install)
+        run: |
+          cd mobile/ios
+          pod install
         env:
-          CI: 1
+          LANG: en_US.UTF-8
 
       - name: Xcode ile İmzasız Derleme Yap
         run: |
           cd mobile/ios
-          WORKSPACE=$(ls -d *.xcworkspace 2>/dev/null | head -n 1)
-          if [ -n "$WORKSPACE" ]; then
-            SCHEME=$(basename "$WORKSPACE" .xcworkspace)
-            echo "Building Workspace: $WORKSPACE with Scheme: $SCHEME"
-            xcodebuild -workspace "$WORKSPACE" \
-                       -scheme "$SCHEME" \
-                       -configuration Release \
-                       -sdk iphoneos \
-                       -derivedDataPath build \
-                       CODE_SIGNING_ALLOWED=NO \
-                       CODE_SIGNING_REQUIRED=NO \
-                       CODE_SIGN_IDENTITY="" \
-                       CODE_SIGNING_PROVISIONING_PROFILE=""
-          else
-            PROJECT=$(ls -d *.xcodeproj 2>/dev/null | head -n 1)
-            SCHEME=$(basename "$PROJECT" .xcodeproj)
-            echo "Building Project: $PROJECT with Scheme: $SCHEME"
-            xcodebuild -project "$PROJECT" \
-                       -scheme "$SCHEME" \
-                       -configuration Release \
-                       -sdk iphoneos \
-                       -derivedDataPath build \
-                       CODE_SIGNING_ALLOWED=NO \
-                       CODE_SIGNING_REQUIRED=NO \
-                       CODE_SIGN_IDENTITY="" \
-                       CODE_SIGNING_PROVISIONING_PROFILE=""
-          fi
+          echo "Building DeutschFit.xcworkspace..."
+          xcodebuild -workspace DeutschFit.xcworkspace \
+                     -scheme DeutschFit \
+                     -configuration Release \
+                     -sdk iphoneos \
+                     -derivedDataPath build \
+                     CODE_SIGNING_ALLOWED=NO \
+                     CODE_SIGNING_REQUIRED=NO \
+                     CODE_SIGN_IDENTITY="" \
+                     CODE_SIGNING_PROVISIONING_PROFILE=""
           cd ..
           rm -rf Payload app.ipa
           mkdir Payload
