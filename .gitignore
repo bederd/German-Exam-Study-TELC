@@ -63,3 +63,7 @@ app/audio/
 app/data/
 data/
 scripts/*.json
+
+# Include mobile assets
+!mobile/assets/**
+!mobile/assets/images/*
