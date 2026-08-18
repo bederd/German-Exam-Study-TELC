@@ -173,7 +173,7 @@ DeutschFit.Engine = (function() {
           kontext:        thema.kontext || '',
           thema:          thema.thema,
           fragen:         thema.fragen  || [],
-          mindestwoerter: thema.mindestwoerter || 50,
+          mindestwoerter: thema.mindestwoerter || 30,
           tipps:          thema.tipps   || [],
           strukturwoerter: level === 'b1' || level === 'a2' ? ['heute', 'früher', 'im Moment', 'in Zukunft', 'zurzeit', 'als Kind'] : []
         }];
@@ -273,7 +273,7 @@ DeutschFit.Engine = (function() {
             kontext: selectedItem.kontext || '',
             thema: selectedItem.thema,
             fragen: selectedItem.fragen || [],
-            mindestwoerter: selectedItem.mindestwoerter || 50,
+            mindestwoerter: selectedItem.mindestwoerter || 30,
             tipps: selectedItem.tipps || [],
             strukturwoerter: level === 'b1' || level === 'a2' ? ['heute', 'früher', 'im Moment', 'in Zukunft', 'zurzeit', 'als Kind'] : [],
             examType: t.id,

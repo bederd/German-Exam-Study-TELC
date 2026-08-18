@@ -1,0 +1,51 @@
+name: Build Unsigned iOS IPA
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - name: Kodu Klonla
+        uses: actions/checkout@v4
+
+      - name: Node.js Kur
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Mobile Paketlerini Yükle
+        run: |
+          cd mobile
+          npm install
+
+      - name: Expo Prebuild (iOS dosyalarını oluştur)
+        run: |
+          cd mobile
+          npx expo prebuild -p ios --clean
+
+      - name: Xcode ile İmzasız Derleme Yap
+        run: |
+          cd mobile/ios
+          WORKSPACE=$(ls | grep .xcworkspace | head -1)
+          SCHEME=$(basename "$WORKSPACE" .xcworkspace)
+          xcodebuild -workspace "$WORKSPACE" \
+                     -scheme "$SCHEME" \
+                     -configuration Release \
+                     -sdk iphoneos \
+                     -derivedDataPath build \
+                     CODE_SIGNING_ALLOWED=NO \
+                     CODE_SIGNING_REQUIRED=NO \
+                     CODE_SIGN_IDENTITY="" \
+                     CODE_SIGNING_PROVISIONING_PROFILE=""
+          cd ..
+          mkdir Payload
+          cp -r ios/build/Build/Products/Release-iphoneos/*.app Payload/
+          zip -r app.ipa Payload
+
+      - name: IPA Dosyasını İndirmeye Sun
+        uses: actions/upload-artifact@v4
+        with:
+          name: DeutschFit-unsigned-ipa
+          path: mobile/app.ipa

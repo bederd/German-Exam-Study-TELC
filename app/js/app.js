@@ -571,9 +571,9 @@ DeutschFit.App = (function () {
             ${(ex.strukturwoerter || []).map(w => `<span class="df-badge" style="margin: 2px; background: var(--bg-surface-active);">${w}</span>`).join(' ')}
           </div>
         </div>
-        <textarea class="df-writing-textarea" rows="10" placeholder="Buraya yazın... (min. ${ex.mindestwoerter || 50} kelime)"
+        <textarea class="df-writing-textarea" rows="10" placeholder="Buraya yazın... (min. ${ex.mindestwoerter || 30} kelime)"
           oninput="DeutschFit.App.updateWordCount(this.value)"></textarea>
-        <div class="df-word-count df-word-count--low" id="word-count">0 / ${ex.mindestwoerter || 50} kelime</div>
+        <div class="df-word-count df-word-count--low" id="word-count">0 / ${ex.mindestwoerter || 30} kelime</div>
         <div class="df-flex-col df-gap-sm df-mt-md">
           <button class="df-btn df-btn--primary df-btn--block" id="eval-gemini-btn" onclick="DeutschFit.App.evalSchreiben()">🤖 Yazımı Değerlendir (Gemini AI)</button>
           <button class="df-btn df-btn--ghost df-btn--block" onclick="DeutschFit.App.skipSchreiben()">Geç →</button>
@@ -803,7 +803,7 @@ DeutschFit.App = (function () {
     }
     
     // Register results
-    session.results.push({ correct: correctCount === totalQ, answer: _hoerenAnswers });
+    session.results.push({ correct: correctCount === totalQ, answer: _hoerenAnswers, correctItems: correctCount, totalItems: totalQ, type: 'hoeren-multi' });
     
     // Reward XP for correct ones (custom reward outside standard if needed)
     if (correctCount > 0) {
@@ -1155,8 +1155,23 @@ DeutschFit.App = (function () {
   }
 
   function renderResult() {
-    const correctCount = session.results.filter(r => r.correct).length;
-    const total = session.targetCount || 1;
+    let correctCount = 0;
+    let total = 0;
+
+    session.results.forEach(r => {
+      if (r.max !== undefined && r.score !== undefined) {
+        correctCount += (r.score >= 60 ? 1 : 0);
+        total += 1;
+      } else if (r.totalItems !== undefined) {
+        correctCount += (r.correctItems || 0);
+        total += r.totalItems;
+      } else {
+        correctCount += r.correct ? 1 : 0;
+        total += 1;
+      }
+    });
+
+    if (total === 0) total = session.targetCount || 1;
     const pct = Math.round((correctCount / total) * 100);
     const earnedXP = session.earnedXP || 0;
 
@@ -1654,7 +1669,6 @@ DeutschFit.App = (function () {
   }
 
   window.DeutschFit.App.checkTextLuecke = function() {
-    const session = window.DeutschFit.App._currentSession;
     if (!session) return;
     const ex = session.currentExercise;
     let correctCount = 0;
@@ -1672,12 +1686,17 @@ DeutschFit.App = (function () {
       } else {
         input.style.borderColor = 'var(--color-error)';
         input.style.backgroundColor = '#ffebee';
+        if (expected) {
+          input.value = val ? `${val} (Doğrusu: ${expected})` : expected;
+          input.title = 'Doğru Cevap: ' + expected;
+        }
       }
       input.disabled = true;
     });
 
-    const isAllCorrect = correctCount === Object.keys(ex.answers || {}).length;
-    session.results.push({ correct: isAllCorrect, type: 'text-luecke' });
+    const totalQ = Object.keys(ex.answers || {}).length;
+    const isAllCorrect = correctCount === totalQ;
+    session.results.push({ correct: isAllCorrect, type: 'text-luecke', correctItems: correctCount, totalItems: totalQ });
     
     const btn = document.getElementById('eval-btn');
     if (btn) btn.classList.add('df-hidden');

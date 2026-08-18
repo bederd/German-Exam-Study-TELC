@@ -1,9 +1,11 @@
-# Veritabanı ve Data Dosyaları (Telifli)
+# VeritabanÄ± ve Data DosyalarÄ± (Telifli)
 *.db
+!mobile/assets/deutschfit.db
 *.sqlite
 *.sqlite3
 data/*.json
 data/*.db
+!mobile/assets/deutschfit.db
 data/deutschfit.db
 woerter_db.json
 verb_blocks.json
@@ -11,12 +13,12 @@ clean_verb_blocks.json
 refs_debug.json
 begegnungen_*.json
 
-# Ham metin ve dokümanlar
+# Ham metin ve dokÃ¼manlar
 *.txt
 !requirements.txt
 !CMakeLists.txt
 B1/
-HÖREN/
+HÃREN/
 PDFLER/
 Son vize/
 pdf spektrum deutsch/
@@ -25,10 +27,10 @@ pdf spektrum deutsch/
 *.jpg
 *.png
 
-# Çevre Değişkenleri
+# Ãevre DeÄiÅkenleri
 .env
 
-# Python İlgili Dosyalar
+# Python Ä°lgili Dosyalar
 __pycache__/
 *.pyc
 *.pyo
@@ -47,7 +49,7 @@ node_modules/
 .vscode/
 .idea/
 
-# Agent Logları
+# Agent LoglarÄ±
 .agents/
 scratch/
 server.log
@@ -55,7 +57,7 @@ server_err.log
 server_stderr.log
 server_stdout.log
 
-# Ekstra Gereksiz ve Telifli Klas�rler
+# Ekstra Gereksiz ve Telifli Klasörler
 schreiben/
 app/audio/
 app/data/

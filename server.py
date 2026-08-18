@@ -194,13 +194,17 @@ def api_stats(level):
 from google import genai
 from google.genai import types
 
-def _call_gemini(client, prompt, system_instruction):
+def _call_gemini(client, prompt, system_instruction, response_mime_type=None):
+    config_args = {}
+    if system_instruction:
+        config_args["system_instruction"] = system_instruction
+    if response_mime_type:
+        config_args["response_mime_type"] = response_mime_type
+        
     response = client.models.generate_content(
         model='gemini-3.6-flash',
         contents=prompt,
-        config=types.GenerateContentConfig(
-            system_instruction=system_instruction,
-        ),
+        config=types.GenerateContentConfig(**config_args) if config_args else None,
     )
     return response.text
 
@@ -264,7 +268,7 @@ def api_evaluate_schreiben(data, api_key):
             "    }\n"
             "  ]\n"
             "}\n\n"
-            "If there are no errors, the \"errors\" array must be empty `[]`.\n"
+            "If there are no errors, the \"errors\" array must be empty `[]`. Do not invent errors to reach a certain number. If the student made only 1 or 2 errors, just list those. You are NOT required to provide exactly 3 errors.\n"
             "Ensure the JSON is properly escaped. \n"
             "OUTPUT ONLY VALID JSON."
         )
@@ -282,7 +286,7 @@ def api_evaluate_schreiben(data, api_key):
         prompt = f"assignment_prompt:\n{assignment_prompt}\n\nstudent_text:\n\"{user_text}\""
         
         with ThreadPoolExecutor(max_workers=1) as executor:
-            future = executor.submit(_call_gemini, client, prompt, system_instruction)
+            future = executor.submit(_call_gemini, client, prompt, system_instruction, "application/json")
             try:
                 text_resp = future.result(timeout=60)
             except FuturesTimeoutError:
@@ -315,20 +319,20 @@ def api_analyze_word(data, api_key):
 
     word = data.get('word', '')
     prompt = f"""Sen bir Almanca kelime analiz uzmanısın. Aşağıdaki kelimeyi analiz et: "{word}"
-Eğer isimse: artikel, plural, turkce, ingilizce, örnek cümleler (5 farklı kasus).
-Eğer fiilse: conjugation (ich, du, er_sie_es, wir, ihr, sie_Sie), perfekt, praeteritum, kasus, common_preposition (varsa), regelmaessig, turkce, ingilizce, örnek cümleler.
-Eğer sıfat/zarf ise: turkce, ingilizce, komparativ, superlativ, declension_table, örnek cümleler.
-Eğer edat (preposition) ise: turkce, ingilizce, kasus (akk/dat/wechsel), common_verbs, örnek cümleler.
+Eğer isimse: artikel, plural, turkce, ingilizce, örnek cümleler (en fazla 2 kısa örnek).
+Eğer fiilse: conjugation (ich, du, er_sie_es, wir, ihr, sie_Sie), perfekt, praeteritum, kasus, common_preposition (varsa), regelmaessig, turkce, ingilizce, örnek cümleler (en fazla 2 kısa örnek).
+Eğer sıfat/zarf ise: turkce, ingilizce, komparativ, superlativ, örnek cümleler (en fazla 2 kısa örnek).
+Eğer edat (preposition) ise: turkce, ingilizce, kasus (akk/dat/wechsel), örnek cümleler (en fazla 2 kısa örnek).
 
 Her bir kelime türü için, "type" alanını (isim, fiil, sıfat, preposition) mutlaka belirt.
 Örnek cümleleri sen üret. Her örneğin "sentence" ve "translation" kısımları olsun.
 
-Lütfen SADECE geçerli bir JSON objesi döndür (Markdown code block olmadan)."""
+SADECE JSON FORMATINDA ÇIKTI VER."""
     
     try:
         client = genai.Client(api_key=api_key)
         with ThreadPoolExecutor(max_workers=1) as executor:
-            future = executor.submit(_call_gemini, client, prompt, "")
+            future = executor.submit(_call_gemini, client, prompt, "", "application/json")
             try:
                 text_resp = future.result(timeout=60)
             except FuturesTimeoutError:
@@ -372,7 +376,7 @@ SADECE JSON FORMATINDA CEVAP VER."""
     try:
         client = genai.Client(api_key=api_key)
         with ThreadPoolExecutor(max_workers=1) as executor:
-            future = executor.submit(_call_gemini, client, prompt, "")
+            future = executor.submit(_call_gemini, client, prompt, "", "application/json")
             try:
                 text_resp = future.result(timeout=60)
             except FuturesTimeoutError:
@@ -420,7 +424,7 @@ Lütfen SADECE geçerli bir JSON objesi döndür (Markdown code block olmadan). 
     try:
         client = genai.Client(api_key=api_key)
         with ThreadPoolExecutor(max_workers=1) as executor:
-            future = executor.submit(_call_gemini, client, prompt, "")
+            future = executor.submit(_call_gemini, client, prompt, "", "application/json")
             try:
                 text_resp = future.result(timeout=60)
             except FuturesTimeoutError:
