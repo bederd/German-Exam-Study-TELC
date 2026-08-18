@@ -23,7 +23,8 @@ jobs:
       - name: Expo Prebuild (iOS native projesini oluştur ve Pods yükle)
         run: |
           cd mobile
-          npx expo prebuild -p ios --clean
+          npx expo prebuild -p ios --clean --no-install
+          npx pod-install ios
         env:
           CI: 1
 
@@ -55,3 +56,4 @@ jobs:
         with:
           name: DeutschFit-unsigned-ipa
           path: mobile/app.ipa
+
