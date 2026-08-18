@@ -54,3 +54,10 @@ server.log
 server_err.log
 server_stderr.log
 server_stdout.log
+
+# Ekstra Gereksiz ve Telifli Klasörler
+schreiben/
+app/audio/
+app/data/
+data/
+scripts/*.json

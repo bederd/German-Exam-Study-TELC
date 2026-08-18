@@ -177,15 +177,11 @@ DeutschFit.App = (function () {
     const mod = modules.find(m => m.id === moduleId);
     if (!mod) return navigate('home');
 
-    const isHoeren = moduleId === 'hoeren';
-
     const html = `
       <div class="df-animate-in">
         <div class="df-header df-mb-lg">
           <button class="df-header__back df-btn df-btn--ghost" onclick="window.location.hash='home'">←</button>
           <h1 class="df-header__title">${mod.icon} ${mod.name}</h1>
-        </div>
-        ${isHoeren ? '<div class="df-card df-mb-md" style="border-left: 3px solid var(--color-warning);"><span style="color: var(--color-warning);">⚠️</span> Ses dosyaları henüz eklenmedi. Metin olarak gösterilecek.</div>' : ''}
         <div class="df-flex-col df-gap-md">
           ${mod.types.map(t => `
             <div class="df-card" style="cursor: pointer;" onclick="DeutschFit.App.startExercise('${t.id}')">
