@@ -13,17 +13,17 @@ jobs:
       - name: Node.js Kur
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Mobile Paketlerini Yükle
         run: |
           cd mobile
-          npm install
+          npm install --legacy-peer-deps
 
-      - name: Expo Prebuild (iOS dosyalarını oluştur)
+      - name: Expo Prebuild (iOS native dosyalarını oluştur)
         run: |
           cd mobile
-          npx expo prebuild -p ios --clean
+          npx expo prebuild -p ios --clean --no-install
 
       - name: Xcode ile İmzasız Derleme Yap
         run: |
