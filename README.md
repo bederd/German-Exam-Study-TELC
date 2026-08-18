@@ -16,6 +16,10 @@ DeutschFit is an AI-powered German language learning and assessment platform. It
 
 To demonstrate the application's functionality without violating copyright laws, a set of **mock/dummy data** is provided in the `sample_data/` directory.
 
+### Generating Your Own Data
+If you want to use this application with your own German textbooks, you can automatically extract texts and generate TELC-format questions using our custom data pipeline. 
+Please refer to the [AI Data Pipeline Workflow](AI_Data_Pipeline_Workflow.md) document for detailed technical instructions on how to use AI to mine data from PDFs.
+
 ### How to run with your own data:
 If you want to run this application locally, you will need to provide your own JSON/Database files in the root directory or update the Python scripts to point to the `sample_data/` files.
 
