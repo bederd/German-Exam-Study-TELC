@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "created": "2026-08-18",
+    "description": "Örnek Kelime Veritabanı (Mock Data)",
+    "version": "1.0"
+  },
+  "words": [
+    {
+      "word": "machen",
+      "type": "fiil",
+      "conjugation": {
+        "ich": "mache",
+        "du": "machst",
+        "er_sie_es": "macht",
+        "wir": "machen",
+        "ihr": "macht",
+        "sie_Sie": "machen"
+      },
+      "perfekt": "hat gemacht",
+      "praeteritum": "machte",
+      "kasus": "akkusativ",
+      "common_preposition": "",
+      "regelmaessig": true,
+      "turkce": "yapmak",
+      "ingilizce": "to do / to make",
+      "examples": [
+        {
+          "sentence": "Was machst du heute?",
+          "translation": "Bugün ne yapıyorsun?",
+          "highlight": "praesens",
+          "book": "A1",
+          "page": 12
+        }
+      ]
+    },
+    {
+      "word": "Apfel",
+      "type": "isim",
+      "artikel": "der",
+      "plural": "die Äpfel",
+      "turkce": "elma",
+      "ingilizce": "apple",
+      "examples": [
+        {
+          "sentence": "Ich esse einen Apfel.",
+          "translation": "Ben bir elma yiyorum.",
+          "highlight": "akkusativ",
+          "book": "A1",
+          "page": 15
+        }
+      ]
+    }
+  ]
+}

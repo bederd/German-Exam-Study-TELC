@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Lesen + Hören Stratejisi</title>
+<style>
+    @page {
+      size: A4;
+      margin: 18mm 16mm 20mm 16mm;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+      font-size: 10.8pt;
+      line-height: 1.65;
+      color: #1f2937;
+      background: #ffffff;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* Kapak / başlık şeridi */
+    .cover {
+      background: linear-gradient(135deg, #c2410c 0%, #fb923c 100%);
+      color: #ffffff;
+      padding: 28mm 14mm 20mm 14mm;
+      margin: -18mm -16mm 10mm -16mm;
+      border-radius: 0;
+      page-break-after: avoid;
+    }
+    .cover .icon {
+      font-size: 36pt;
+      line-height: 1;
+      margin-bottom: 8mm;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15));
+    }
+    .cover h1.cover-title {
+      font-size: 28pt;
+      margin: 0 0 4mm 0;
+      padding: 0;
+      border: none;
+      color: #ffffff;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .cover .cover-sub {
+      font-size: 12pt;
+      opacity: 0.92;
+      font-weight: 400;
+      max-width: 90%;
+    }
+    .cover .cover-meta {
+      margin-top: 10mm;
+      font-size: 9pt;
+      opacity: 0.85;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* Başlıklar */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Segoe UI', 'Inter', sans-serif;
+      color: #111827;
+      page-break-after: avoid;
+      page-break-inside: avoid;
+    }
+
+    h1 {
+      font-size: 20pt;
+      font-weight: 800;
+      margin: 14mm 0 5mm 0;
+      padding-bottom: 3mm;
+      border-bottom: 3px solid #c2410c;
+      color: #c2410c;
+      letter-spacing: -0.3px;
+    }
+
+    h2 {
+      font-size: 15pt;
+      font-weight: 700;
+      margin: 11mm 0 4mm 0;
+      padding: 2mm 4mm 2mm 4mm;
+      background: #ffedd5;
+      border-left: 4px solid #c2410c;
+      color: #c2410c;
+      border-radius: 0 4px 4px 0;
+    }
+
+    h3 {
+      font-size: 12.5pt;
+      font-weight: 700;
+      margin: 8mm 0 3mm 0;
+      color: #c2410c;
+      padding-left: 3mm;
+      border-left: 3px solid #fb923c;
+    }
+
+    h4 {
+      font-size: 11.5pt;
+      font-weight: 700;
+      margin: 6mm 0 2mm 0;
+      color: #374151;
+    }
+
+    h5, h6 {
+      font-size: 11pt;
+      font-weight: 600;
+      margin: 5mm 0 2mm 0;
+      color: #4b5563;
+    }
+
+    p {
+      margin: 0 0 3mm 0;
+      orphans: 3;
+      widows: 3;
+    }
+
+    /* Vurgu */
+    strong, b {
+      color: #111827;
+      font-weight: 700;
+    }
+    em, i {
+      color: #4b5563;
+    }
+
+    /* Linkler */
+    a {
+      color: #c2410c;
+      text-decoration: none;
+      border-bottom: 1px dotted #fb923c;
+    }
+
+    /* Kod */
+    code {
+      font-family: 'Consolas', 'SF Mono', 'Monaco', monospace;
+      font-size: 0.92em;
+      background: #fff7ed;
+      color: #c2410c;
+      padding: 0.5mm 1.5mm;
+      border-radius: 3px;
+      border: 1px solid #ffedd5;
+    }
+    pre {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #fb923c;
+      border-radius: 6px;
+      padding: 4mm 5mm;
+      margin: 4mm 0;
+      overflow-x: auto;
+      page-break-inside: avoid;
+      font-size: 9.8pt;
+      line-height: 1.55;
+    }
+    pre code {
+      background: none;
+      border: none;
+      color: #1f2937;
+      padding: 0;
+      font-size: inherit;
+    }
+
+    /* Blockquote */
+    blockquote {
+      margin: 4mm 0;
+      padding: 3mm 5mm;
+      background: #fff7ed;
+      border-left: 4px solid #c2410c;
+      border-radius: 0 6px 6px 0;
+      color: #374151;
+      page-break-inside: avoid;
+    }
+    blockquote p {
+      margin: 0 0 2mm 0;
+    }
+    blockquote p:last-child {
+      margin-bottom: 0;
+    }
+    blockquote strong {
+      color: #c2410c;
+    }
+
+    /* Listeler */
+    ul, ol {
+      margin: 2mm 0 4mm 0;
+      padding-left: 7mm;
+    }
+    li {
+      margin: 1.2mm 0;
+    }
+    li::marker {
+      color: #c2410c;
+      font-weight: 700;
+    }
+    ul ul, ol ol, ul ol, ol ul {
+      margin: 1mm 0;
+    }
+
+    /* Tablolar */
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 4mm 0;
+      font-size: 9.8pt;
+      page-break-inside: auto;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px #e5e7eb;
+    }
+    thead {
+      display: table-header-group;
+    }
+    tr {
+      page-break-inside: avoid;
+    }
+    th {
+      background: #c2410c;
+      color: #ffffff;
+      font-weight: 700;
+      text-align: left;
+      padding: 2.5mm 3mm;
+      border: 1px solid #c2410c;
+      font-size: 9.5pt;
+    }
+    td {
+      padding: 2.5mm 3mm;
+      border: 1px solid #e5e7eb;
+      vertical-align: top;
+    }
+    tbody tr:nth-child(odd) {
+      background: #fff7ed;
+    }
+    tbody tr:hover {
+      background: #ffedd5;
+    }
+    table code {
+      font-size: 0.88em;
+      padding: 0.3mm 1mm;
+    }
+
+    /* Yatay çizgi — bölüm ayırıcı */
+    hr {
+      border: none;
+      height: 0;
+      margin: 8mm 0;
+      border-top: 2px dashed #ffedd5;
+      page-break-after: auto;
+    }
+
+    /* Dipnot benzeri small */
+    small {
+      font-size: 9pt;
+      color: #6b7280;
+    }
+
+    /* Sayfa kırılma kontrolü */
+    h1, h2 {
+      page-break-before: auto;
+    }
+    table, pre, blockquote {
+      page-break-inside: avoid;
+    }
+
+    /* Print iyileştirme */
+    @media print {
+      body {
+        font-size: 10.5pt;
+      }
+      a {
+        color: #c2410c;
+      }
+    }
+    </style>
+</head>
+<body>
+<div class="cover">
+  <div class="icon">👂</div>
+  <h1 class="cover-title">Lesen + Hören Stratejisi</h1>
+  <div class="cover-sub">Okuma · Dinleme · Karar Ağaçları · Anahtar Kelimeler</div>
+  <div class="cover-meta">Sınav: 29 Nisan 2026 · Hazırlık Notu</div>
+</div>
+<h1 id="lesen-horen-strateji-rehberi">Lesen + Hören Strateji Rehberi</h1>
+<blockquote>
+<p><strong>Sınav:</strong> 29 Nisan 2026 — Almanca, A2 ağırlıklı + B1 dokunuşlu</p>
+<p><strong>Notu:</strong> Schreiben gibi ezberlenecek metin yok. Lesen ve Hören'de kazanmanın yolu <strong>soru tiplerini tanıma + tuzak farkındalığı + sistematik okuma/dinleme protokolü</strong>. Audio kaynağımız yok, bu yüzden Hören sadece sınav anı stratejisi.</p>
+</blockquote>
+<hr>
+<h1 id="a-lesen-okuma">A. LESEN (Okuma)</h1>
+<h2 id="1-snavda-beklenen-3-soru-tipi">1. Sınavda Beklenen 3 Soru Tipi</h2>
+<h3 id="tip-1-coktan-secmeli-a-b-c">Tip 1 — Çoktan Seçmeli (A / B / C)</h3>
+<blockquote>
+<p>Soru: "Was macht Markus jeden Mittwoch um 9.00 Uhr?"<br>
+A) Er fährt ins Büro. B) Er hat eine Besprechung. C) Er liest E-Mails.</p>
+</blockquote>
+<p><strong>Tuzak:</strong> Genelde A ve C şıkları metinde <strong>geçen ama soruya cevap olmayan</strong> bilgilerdir. Doğru cevap çoğu zaman <strong>paraphrase</strong> edilmiştir.</p>
+<h3 id="tip-2-richtig-falsch-dogru-yanls">Tip 2 — Richtig / Falsch (Doğru / Yanlış)</h3>
+<blockquote>
+<p>"Markus geht jeden Tag ins Fitnessstudio." → richtig / falsch</p>
+</blockquote>
+<p><strong>Tuzak:</strong> Metinde "ich gehe ins Fitnessstudio" yazar — <strong>ama "jeden Tag" demez.</strong> "Manchmal" / "ab und zu" varsa cevap <strong>falsch</strong>.</p>
+<h3 id="tip-3-richtig-falsch-nicht-im-text-b1">Tip 3 — Richtig / Falsch / Nicht im Text (B1)</h3>
+<blockquote>
+<p>"Markus arbeitet seit 5 Jahren als Redakteur." → richtig / falsch / <strong>nicht im Text</strong></p>
+</blockquote>
+<p><strong>Üçüncü seçenek = altın kural:</strong> Metin "wie lange" diye söylemediyse → <strong>Nicht im Text</strong>. Tahmin etme.</p>
+<hr>
+<h2 id="2-soru-once-oku-teknigi-kritik">2. Soru-Önce-Oku Tekniği (KRİTİK)</h2>
+<pre><code>1. Önce SORULARI oku (1-2 dk) — metni okumadan
+2. Soru tiplerini işaretle: çoktan seçmeli mi, R/F mi, R/F/N mi?
+3. Sorulardaki ANAHTAR KELİMELERİ altını çiz (isim, fiil, sayı, zaman)
+4. SONRA metni oku — soruların anahtar kelimelerini ararken
+5. Bulduğunda cümlenin ETRAFINDAKİ 1-2 cümleyi oku (paraphrase için)
+6. İşaretle, cevap ver
+</code></pre>
+<p><strong>Neden kritik:</strong> Metni baştan sona dikkatlice okumak A2-B1 sınavında <strong>ZAMAN KAYBI</strong>. Soruları bilen okuyucu "scan" yapar, hızlı cevaplar.</p>
+<hr>
+<h2 id="3-3-okuma-modu">3. 3 Okuma Modu</h2>
+<table>
+<thead>
+<tr>
+<th>Mod</th>
+<th>Hız</th>
+<th>Ne için</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Skim</strong> (göz gezdirme)</td>
+<td>30 sn / 200 W</td>
+<td>İlk geçişte konuyu/temayı yakala. Başlık + ilk cümle + son cümle.</td>
+</tr>
+<tr>
+<td><strong>Scan</strong> (avlama)</td>
+<td>1-2 dk</td>
+<td>Belirli bilgi avı (isim, sayı, tarih). Anahtar kelimeyi bul.</td>
+</tr>
+<tr>
+<td><strong>Detail</strong> (detaylı)</td>
+<td>3-4 dk</td>
+<td>Sadece soruya cevap olan paragrafı yavaş oku.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sıra:</strong> Soru oku → Skim → Scan → Detail (sadece gerekirse).</p>
+<hr>
+<h2 id="4-paraphrase-tuzag-en-sk-hata">4. Paraphrase Tuzağı (en sık hata)</h2>
+<p>Soru ve metin <strong>aynı kelimeleri kullanmaz</strong> — sınonim/farklı yapı kullanır:</p>
+<table>
+<thead>
+<tr>
+<th>Sorudaki ifade</th>
+<th>Metindeki paraphrase</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>viel arbeiten</td>
+<td>hat viel zu tun / arbeitet lange</td>
+</tr>
+<tr>
+<td>gerne kochen</td>
+<td>das Kochen macht ihm Spaß</td>
+</tr>
+<tr>
+<td>im Internet surfen</td>
+<td>regelmäßig im Netz surfen</td>
+</tr>
+<tr>
+<td>jeden Tag</td>
+<td>täglich / regelmäßig</td>
+</tr>
+<tr>
+<td>zufrieden sein</td>
+<td>gefällt es ihm / es geht ihm gut</td>
+</tr>
+<tr>
+<td>keine Zeit haben</td>
+<td>wenig Zeit haben / der Tag ist voll</td>
+</tr>
+<tr>
+<td>schwer sein</td>
+<td>nicht einfach sein / kompliziert sein</td>
+</tr>
+<tr>
+<td>wichtig</td>
+<td>bedeutend / zentral / entscheidend</td>
+</tr>
+<tr>
+<td>oft</td>
+<td>häufig / regelmäßig / immer wieder</td>
+</tr>
+<tr>
+<td>vielleicht</td>
+<td>wahrscheinlich / möglicherweise</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pratik test:</strong> Bir cevap "metinle birebir aynı" görünüyorsa → <strong>dikkat, tuzak olabilir.</strong> Doğru cevap çoğu zaman paraphrase'tir.</p>
+<hr>
+<h2 id="5-b1-zorluk-isaretcileri-metni-okurken-bunlara-dikkat">5. B1 Zorluk İşaretçileri (metni okurken bunlara dikkat!)</h2>
+<p>Bu kelimeleri görürsen cümle <strong>karmaşıklaşıyor</strong>, yavaşla:</p>
+<table>
+<thead>
+<tr>
+<th>Kelime</th>
+<th>Anlam</th>
+<th>Cümleyi nasıl çevirir?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>obwohl</strong></td>
+<td>-e rağmen</td>
+<td>"Obwohl er müde war, ging er ins Kino." (Yorgun olmasına rağmen sinemaya gitti.)</td>
+</tr>
+<tr>
+<td><strong>während</strong></td>
+<td>iken / -dığı sırada</td>
+<td>"Während sie kochte, las er." (O yemek pişerken o okudu.)</td>
+</tr>
+<tr>
+<td><strong>trotzdem</strong></td>
+<td>yine de</td>
+<td>"Es regnete, trotzdem ging er spazieren."</td>
+</tr>
+<tr>
+<td><strong>deshalb / deswegen / darum</strong></td>
+<td>bu yüzden</td>
+<td>(sebep-sonuç)</td>
+</tr>
+<tr>
+<td><strong>damit</strong></td>
+<td>-sin diye</td>
+<td>(amaç)</td>
+</tr>
+<tr>
+<td><strong>um … zu</strong></td>
+<td>-mek için</td>
+<td>"um zu studieren" = öğrenim görmek için</td>
+</tr>
+<tr>
+<td><strong>seitdem</strong></td>
+<td>-den beri</td>
+<td>(zaman)</td>
+</tr>
+<tr>
+<td><strong>bevor / nachdem</strong></td>
+<td>-den önce / -den sonra</td>
+<td>(sıra)</td>
+</tr>
+<tr>
+<td><strong>Konjunktiv II</strong> (hätte/wäre/würde/könnte)</td>
+<td>-seydim / -ebilir</td>
+<td>hipotetik / kibar</td>
+</tr>
+<tr>
+<td><strong>Passiv</strong> (wird/wurde + P.II)</td>
+<td>edilgen</td>
+<td>"wird gebaut" = inşa edilir</td>
+</tr>
+</tbody>
+</table>
+<p><strong>İpucu:</strong> Bu kelimelerden biri SORUDA varsa, metinde de mutlaka aynı/benzer yapıyı ara.</p>
+<hr>
+<h2 id="6-richtig-falsch-nicht-im-text-karar-agac">6. Richtig / Falsch / Nicht im Text — Karar Ağacı</h2>
+<pre><code>Sorudaki bilgi METİNDE açıkça geçiyor mu?
+│
+├── EVET, aynı/benzer ifadeyle  → RICHTIG ✓
+│
+├── EVET, ama TERS söylüyor (negatif/farklı sayı/farklı zaman)  → FALSCH ✗
+│
+└── HAYIR, hiç bahsetmiyor  → NICHT IM TEXT ❓
+                                (eksik bilgi tahmin edilmez)
+</code></pre>
+<p><strong>Klasik tuzaklar:</strong><br>
+- Soru: "Markus arbeitet <strong>gern</strong> als Redakteur." → Metin "Ich arbeite als Redakteur" diyor ama "gern" demiyor → <strong>Nicht im Text</strong> (gern = keyifle, metinde yok)<br>
+- Soru: "Markus geht <strong>jeden Tag</strong> ins Fitnessstudio." → Metin "Nach der Arbeit gehe ich ins Fitnessstudio" der → <strong>Falsch</strong> (her gün denmemiş)<br>
+- Soru: "Markus muss manchmal Wäsche waschen." → Metin "Ab und zu muss ich Wäsche waschen" der → <strong>Richtig</strong> (ab und zu = manchmal, paraphrase)</p>
+<hr>
+<h2 id="7-model-metin-calsma-b1-pdfinden-ornek">7. Model Metin Çalışma — B1 PDF'inden örnek</h2>
+<h3 id="ornek-1-markusun-gunu-b1-pdf1-s10-ksaltlms">Örnek 1: Markus'un Günü (B1 PDF1 s.10, kısaltılmış)</h3>
+<blockquote>
+<p>Ich heiße Markus und ich bin mit meinem Leben zufrieden. Montags bis freitags stehe ich um 7.00 Uhr auf, gegen 8.00 Uhr fahre ich mit dem Auto ins Büro. Das dauert normalerweise 15 Minuten, aber an drei Tagen in der Woche warte ich 30 Minuten oder länger im Stau und ärgere mich. Ich arbeite als Redakteur bei einem großen Verlag in Frankfurt. Meine Arbeitszeit beginnt um 9.00 Uhr. Zuerst beantworte ich meine E-Mails, danach lese ich Dokumente. Jeden Mittwoch um 9.00 Uhr haben wir eine Besprechung. Nach der Arbeit gehe ich ins Fitnessstudio. Ab und zu muss ich auch meine Wohnung sauber machen — das gehört nicht zu meinen Lieblingstätigkeiten.</p>
+</blockquote>
+<p><strong>Pratik 5 soru (R / F / Nicht im Text):</strong></p>
+<ol>
+<li>Markus ist mit seinem Leben zufrieden. → ?</li>
+<li>Markus fährt mit dem Bus ins Büro. → ?</li>
+<li>Er steht jeden Tag im Stau. → ?</li>
+<li>Markus arbeitet seit 10 Jahren als Redakteur. → ?</li>
+<li>Markus mag das Aufräumen seiner Wohnung. → ?</li>
+</ol>
+<p><strong>Cevaplar:</strong><br>
+1. <strong>Richtig</strong> — "ich bin mit meinem Leben zufrieden" (birebir).<br>
+2. <strong>Falsch</strong> — "fahre ich mit dem Auto" (Auto ≠ Bus).<br>
+3. <strong>Falsch</strong> — "an drei Tagen in der Woche" (her gün değil).<br>
+4. <strong>Nicht im Text</strong> — süre belirtilmedi.<br>
+5. <strong>Falsch</strong> — "gehört nicht zu meinen Lieblingstätigkeiten" (sevmiyor).</p>
+<h3 id="ornek-2-statistik-metni-b1-pdf1-s17">Örnek 2: Statistik metni (B1 PDF1 s.17)</h3>
+<blockquote>
+<p>An der Lieblingsbeschäftigung der Deutschen hat sich in den letzten Jahrzehnten nichts geändert: Sie sitzen vor dem Fernseher und sehen am liebsten Fußball oder Krimis. Rund 19 Stunden Mord und Totschlag kann man im deutschen Fernsehen täglich konsumieren. Laut einer Umfrage haben die Deutschen fast vier Stunden Freizeit pro Tag.</p>
+</blockquote>
+<p><strong>Soru tipi: çoktan seçmeli</strong></p>
+<blockquote>
+<p>Wie viel Freizeit haben die Deutschen pro Tag?<br>
+A) 4 Stunden Mord und Totschlag<br>
+B) fast 4 Stunden  ← <strong>doğru</strong><br>
+C) 19 Stunden</p>
+</blockquote>
+<p>A şıkkı tuzak: 4 sayısı geçiyor ama "Mord und Totschlag" Fernsehen ile ilgili. C şıkkı: 19 saat günlük Krimi yayın süresi, Freizeit değil.</p>
+<hr>
+<h2 id="8-lesen-snav-gunu-protokolu-15-dk-metin-icin-tahmini">8. Lesen Sınav Günü Protokolü (15 dk metin için tahmini)</h2>
+<pre><code>0:00-1:30  → Soruları oku, anahtar kelimelerin altını çiz, soru tiplerini işaretle
+1:30-3:30  → Skim: metnin konusu ne? (başlık + ilk/son cümle)
+3:30-9:30  → Scan: her soruyu sırayla al, metinde anahtar kelimeyi bul
+9:30-13:00 → Detail: emin olmadığın 1-2 soru için ilgili paragrafı yavaş oku
+13:00-14:30 → Cevapları işaretle, R/F/N için karar ağacı uygula
+14:30-15:00 → Boş bırakma! Emin değilsen Richtig'i tercih et (oran daha yüksek), R/F/N'de &quot;Nicht im Text&quot; dene
+</code></pre>
+<p><strong>Altın kural:</strong> Bilmediğin kelime panik sebebi değil. <strong>Bağlamdan tahmin</strong> et + soruyu cevaplamaya yetiyor mu kontrol et.</p>
+<hr>
+<h1 id="b-horen-dinleme">B. HÖREN (Dinleme)</h1>
+<blockquote>
+<p><strong>Audio kaynağımız yok</strong> — bu bölüm sadece sınav anı stratejisi. Burada amaç ezber değil, <strong>sınavda doğru ses dosyası önünde ne yapacağını bilmek</strong>.</p>
+</blockquote>
+<h2 id="1-snavda-beklenen-format">1. Sınavda Beklenen Format</h2>
+<p>Genelde:<br>
+- <strong>2 kez</strong> dinleme hakkı (bazı sınavlarda 1 kez)<br>
+- Her ses 30 sn - 2 dk arası<br>
+- Sorular: çoktan seçmeli A/B/C <strong>veya</strong> Richtig/Falsch<br>
+- Tipler: telefon konuşması, anons (tren/havaalanı), radyo programı, diyalog, mülakat</p>
+<h2 id="2-2x-dinleme-protokolu">2. 2x Dinleme Protokolü</h2>
+<h3 id="birinci-dinleyis-genel-resim">Birinci Dinleyiş — "Genel Resim"</h3>
+<ul>
+<li>Soruları <strong>dinlemeden ÖNCE</strong> oku, anahtar kelimeleri işaretle</li>
+<li>Dinlerken: <strong>ana fikir + sayı/zaman/yer</strong> odakla</li>
+<li>Detayları kaçırırsan üzülme — ikincide alacaksın</li>
+<li>Hızlı not: kısa kelime, sembol, sayı</li>
+</ul>
+<h3 id="ikinci-dinleyis-detay-av">İkinci Dinleyiş — "Detay Avı"</h3>
+<ul>
+<li>İlk dinleyişte cevaplayamadığın sorulara odak</li>
+<li>Anahtar kelimeyi yakaladığında çevresine kulak ver (paraphrase!)</li>
+<li>Şüphe varsa <strong>kalemi kaldırma</strong>, son saniyede karar verme</li>
+</ul>
+<h2 id="3-mutlaka-yakalanacak-5-sey">3. Mutlaka Yakalanacak 5 Şey</h2>
+<table>
+<thead>
+<tr>
+<th>Kategori</th>
+<th>Örnek</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sayılar</strong></td>
+<td>um 8 Uhr / 15 Minuten / 30 Euro / 5. Stock</td>
+</tr>
+<tr>
+<td><strong>Zaman</strong></td>
+<td>heute / morgen / nächste Woche / am Freitag / im Sommer</td>
+</tr>
+<tr>
+<td><strong>Yer</strong></td>
+<td>im Büro / am Bahnhof / zu Hause / in der Schule</td>
+</tr>
+<tr>
+<td><strong>İsim/Marka</strong></td>
+<td>Frau Müller / Hotel Adler / Firma BAUFIX</td>
+</tr>
+<tr>
+<td><strong>İlişki kelimesi</strong></td>
+<td>aber / weil / trotzdem / deshalb (sebep-sonuç!)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Not formatı:</strong></p>
+<pre><code>8:00  → Bf (Bahnhof)
+Müller geh. → Termin abges.    (Müller hasta → randevu iptal)
+?? Donnerstag 15:00            (yeni teklif)
+</code></pre>
+<h2 id="4-anahtar-kelimeler-karar-belirleyiciler">4. Anahtar Kelimeler — Karar Belirleyiciler</h2>
+<table>
+<thead>
+<tr>
+<th>Kelime</th>
+<th>Anlam</th>
+<th>Etki</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ja / doch</strong></td>
+<td>evet</td>
+<td>onay</td>
+</tr>
+<tr>
+<td><strong>nein / nicht / kein</strong></td>
+<td>hayır</td>
+<td>inkar</td>
+</tr>
+<tr>
+<td><strong>aber / jedoch</strong></td>
+<td>ama</td>
+<td>tersine çevir</td>
+</tr>
+<tr>
+<td><strong>eigentlich</strong></td>
+<td>aslında</td>
+<td>beklenmedik bilgi gelecek</td>
+</tr>
+<tr>
+<td><strong>leider</strong></td>
+<td>maalesef</td>
+<td>olumsuz haber</td>
+</tr>
+<tr>
+<td><strong>vielleicht</strong></td>
+<td>belki</td>
+<td>belirsizlik (Nicht im Text adayı!)</td>
+</tr>
+<tr>
+<td><strong>sicher / bestimmt</strong></td>
+<td>kesin</td>
+<td>onay</td>
+</tr>
+<tr>
+<td><strong>trotzdem</strong></td>
+<td>yine de</td>
+<td>beklenenin tersi</td>
+</tr>
+<tr>
+<td><strong>weil / denn</strong></td>
+<td>çünkü</td>
+<td>sebep</td>
+</tr>
+<tr>
+<td><strong>deshalb / darum</strong></td>
+<td>bu yüzden</td>
+<td>sonuç</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tuzak:</strong> Konuşmacı önce bir şey söyler, sonra <strong>"aber" / "leider" / "doch"</strong> ile <strong>iptal eder</strong>. Birinci yarıyı duyup işaretleme — sonunu bekle.</p>
+<h2 id="5-richtig-falsch-karar-agac-horen-icin">5. Richtig / Falsch Karar Ağacı (Hören için)</h2>
+<pre><code>Soruda söylenen bilgi sesli kayıttta nasıl geçti?
+│
+├── Aynı / paraphrase olarak GEÇTİ + olumlu ton  → RICHTIG ✓
+├── GEÇTİ ama &quot;aber/nicht/leider&quot; ile İPTAL EDİLDİ → FALSCH ✗
+├── GEÇTİ ama farklı sayı/zaman/yer  → FALSCH ✗
+└── HİÇ GEÇMEDİ  → (B1 ise: Nicht im Text / A2 ise: Falsch tahmin)
+</code></pre>
+<h2 id="6-tipler-ve-tipik-tuzaklar">6. Tipler ve Tipik Tuzaklar</h2>
+<h3 id="telefon-konusmas-en-sk">Telefon konuşması (en sık)</h3>
+<ul>
+<li>"Geliyorum / iptal / ertelendi / yeni teklif" akışına dikkat</li>
+<li>Kişi adı + saat + yer 3'lü her zaman not al</li>
+<li>"<strong>Soll ich ihm etwas ausrichten?</strong>" → mesaj iletme bağlamı</li>
+</ul>
+<h3 id="anons-trenhavaalan">Anons (tren/havaalanı)</h3>
+<ul>
+<li>Peron / saat / gecikme süresi 3'lüsü kritik</li>
+<li>"Verspätung von 15 Minuten" = 15 dk gecikme</li>
+<li>"Gleis 5" / "Bahnsteig" = peron numarası</li>
+<li>"fällt aus" = iptal edildi (kritik!)</li>
+</ul>
+<h3 id="diyalog-iki-kisi">Diyalog (iki kişi)</h3>
+<ul>
+<li>Konuşmacıların adı + rolü → kim ne diyor karıştırma</li>
+<li>Anlaşma mı / anlaşmazlık mı?</li>
+<li>"Genau! / Stimmt!" = onay // "Eigentlich nicht / Lieber nicht" = ret</li>
+</ul>
+<h2 id="7-horen-snav-gunu-protokolu">7. Hören Sınav Günü Protokolü</h2>
+<pre><code>ÖNCESİ (audio başlamadan):
+- Soruları oku, anahtar kelimeleri işaretle (1-2 dk)
+- Soru tiplerini işaretle (R/F? çoktan seçmeli?)
+- Beklediğin kelime tipini tahmin et (sayı? isim? saat?)
+
+1. DİNLEYIŞ:
+- Sadece DİNLE, panik etme
+- Yakaladığın anahtar kelimeyi kısa not et
+- Kesin emin olduğun cevapları işaretle
+- Geri kalanını boş bırak (henüz)
+
+ARASI (2 dinleyiş arasındaki 30 sn):
+- Şüpheli soruları gözden geçir
+- 2. dinleyişte hangi spesifik bilgiyi arayacağını planla
+
+2. DİNLEYIŞ:
+- Boş soruların anahtar kelimelerini bekle
+- Geldiğinde KALEMİ HAZIR TUT, çevresine odaklan (paraphrase!)
+- &quot;aber / nicht / leider&quot; duyarsan tüm cümleyi tekrar dinle (zihnen)
+
+SONRA:
+- Tüm cevapları doldur — boş bırakma
+- Şüpheli yerlerde: çoktan seçmelide B sıkça doğrudur, R/F'de R hafif çoğunluk, R/F/N'de bilmiyorsan &quot;Nicht im Text&quot;
+</code></pre>
+<hr>
+<h2 id="8-genel-mottolar">8. Genel Mottolar</h2>
+<ul>
+<li><strong>Lesen:</strong> Soruyu önce oku → metni soruya göre tara → paraphrase tuzağına dikkat → R/F/N'de tahmin etme, "Nicht im Text" gerçek bir seçenektir.</li>
+<li><strong>Hören:</strong> İlk dinleyişte panik yok → not al → 2. dinleyişte boşları doldur → "aber / leider / doch" cümleyi tersine çevirir.</li>
+<li><strong>Her ikisi:</strong> Bilmediğin kelimeden korkma — bağlam %80 söyler. Soruyu cevaplamaya yetiyor mu, ona bak.</li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>Sınav günü hatırlat:</strong> Lesen ve Hören için <strong>boş bırakma</strong> — yanlışın puan götürmediği bir sınavsa rastgele de olsa işaretle. Doldurulmamış soru = 0 puan; tahmin edilen soru = 1/3 puan ihtimali.</p>
+</blockquote>
+</body>
+</html>

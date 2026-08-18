@@ -1,0 +1,564 @@
+/* Exercise Layout */
+.df-timer-display {
+  background: var(--gradient-fire, linear-gradient(135deg, #f59e0b, #ef4444));
+  color: white;
+  padding: 6px 12px;
+  border-radius: var(--radius-full, 20px);
+  font-weight: 700;
+  font-size: var(--font-size-sm, 0.9rem);
+  box-shadow: 0 4px 6px rgba(239, 68, 68, 0.3);
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+}
+
+.df-timer-display::before {
+  content: "⏳";
+  margin-right: 6px;
+  font-size: 1rem;
+}
+
+.df-timer-display--warning {
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  animation: pulse-red 1s infinite alternate;
+}
+
+@keyframes pulse-red {
+  0% { transform: scale(1); box-shadow: 0 0 0 rgba(239, 68, 68, 0.4); }
+  100% { transform: scale(1.05); box-shadow: 0 0 10px rgba(239, 68, 68, 0.8); }
+}
+
+.df-exercise__progress {
+  margin-bottom: var(--space-lg);
+}
+
+.df-exercise__question-number {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  text-align: right;
+  margin-bottom: 4px;
+}
+
+/* Reading Passage */
+.df-reading-passage {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  max-height: 250px;
+  overflow-y: auto;
+  line-height: 1.7;
+  font-size: var(--font-size-base);
+  margin-bottom: var(--space-lg);
+  border-left: 3px solid var(--color-b1); /* Default, should be dynamic via JS */
+}
+
+.df-reading-passage__source {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: var(--space-sm);
+  display: block;
+}
+
+/* Question Text */
+.df-question-text {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin-bottom: var(--space-lg);
+  line-height: 1.5;
+}
+
+/* Multiple Choice Options */
+.df-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.df-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  user-select: none;
+}
+
+.df-option:hover {
+  background: var(--bg-surface-hover);
+  transform: translateX(4px);
+}
+
+.df-option__letter {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-surface-active);
+  font-weight: 700;
+  font-size: var(--font-size-sm);
+  flex-shrink: 0;
+}
+
+.df-option__text {
+  flex: 1;
+  line-height: 1.4;
+}
+
+.df-option--selected {
+  border-color: var(--color-info); /* Level accent fallback */
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.df-option--correct {
+  border-color: var(--color-success);
+  background: rgba(34, 197, 94, 0.1);
+  animation: pulse-green 600ms ease;
+}
+
+.df-option--correct .df-option__letter {
+  background: var(--color-success);
+  color: white;
+}
+
+.df-option--wrong {
+  border-color: var(--color-error);
+  background: rgba(239, 68, 68, 0.1);
+  animation: shake 500ms ease;
+}
+
+.df-option--wrong .df-option__letter {
+  background: var(--color-error);
+  color: white;
+}
+
+.df-option--disabled {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* Richtig/Falsch Toggle */
+.df-rf-options {
+  display: grid;
+  gap: var(--space-sm);
+  grid-template-columns: repeat(2, 1fr); /* JS can change to 3 if N is needed */
+}
+
+.df-rf-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  user-select: none;
+  font-weight: 600;
+  text-align: center;
+}
+
+.df-rf-btn:hover {
+  background: var(--bg-surface-hover);
+}
+
+.df-rf-btn[data-value="richtig"].df-option--selected {
+  border-color: var(--color-success);
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.df-rf-btn[data-value="falsch"].df-option--selected {
+  border-color: var(--color-error);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.df-rf-btn[data-value="nicht im text"].df-option--selected {
+  border-color: var(--color-warning);
+  background: rgba(245, 158, 11, 0.1);
+}
+
+/* Lückentext (Gap Fill) */
+.df-luecke-container .df-luecke-sentence {
+  font-size: var(--font-size-lg);
+  line-height: 2;
+  margin-bottom: var(--space-lg);
+}
+
+.df-luecke-blank {
+  display: inline-block;
+  min-width: 120px;
+  border-bottom: 2px dashed var(--text-muted);
+  text-align: center;
+  padding: 2px 8px;
+  color: var(--color-info); /* Fallback accent */
+  font-weight: 600;
+}
+
+.df-luecke-blank--filled {
+  border-bottom-style: solid;
+  border-color: var(--color-info);
+}
+
+/* Text Lücke (Metin İçi Boşluklar) */
+.df-text-luecke-card {
+  padding: var(--space-lg);
+  background: var(--bg-secondary);
+  border-left: 3px solid var(--color-b1);
+}
+
+.df-luecke-input {
+  display: inline-block;
+  width: 100px;
+  background: var(--bg-surface);
+  border: none;
+  border-bottom: 2px solid var(--text-muted);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 4px 8px;
+  margin: 0 4px;
+  border-radius: 4px 4px 0 0;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.df-luecke-input:focus {
+  border-color: var(--color-info);
+  background: var(--bg-surface-active);
+}
+
+.df-luecke-input.df-input-success {
+  border-color: var(--color-success);
+  color: var(--color-success);
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.df-luecke-input.df-input-error {
+  border-color: var(--color-error);
+  color: var(--color-error);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.df-word-bank-container {
+  background: var(--bg-secondary);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+}
+
+.df-word-chip--static {
+  cursor: default;
+  pointer-events: none;
+  background: var(--bg-surface-active);
+}
+
+
+/* Schreiben (Writing) */
+.df-writing-area {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-x: hidden;
+}
+
+.df-writing-area .df-writing-prompt {
+  margin-bottom: var(--space-md);
+}
+
+.df-writing-questions {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin: var(--space-md) 0;
+  padding-left: var(--space-lg);
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.df-writing-textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-height: 200px;
+  background: var(--bg-secondary);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  resize: vertical;
+  line-height: 1.6;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.df-writing-textarea:focus {
+  border-color: var(--color-info);
+}
+
+.df-word-count {
+  text-align: right;
+  font-size: var(--font-size-sm);
+  margin-top: var(--space-xs);
+}
+.df-word-count--low { color: var(--color-error); }
+.df-word-count--ok { color: var(--color-warning); }
+.df-word-count--good { color: var(--color-success); }
+
+/* Hören (Listening) */
+.df-audio-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-md);
+}
+
+.df-audio-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  background: var(--gradient-hero);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.df-audio-label {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.df-audio-speed {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.df-audio-speed button {
+  background: var(--bg-surface);
+  border: none;
+  color: var(--text-secondary);
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: var(--font-size-xs);
+}
+.df-audio-speed button.active {
+  background: var(--bg-surface-active);
+  color: white;
+}
+
+/* Explanation Box */
+.df-explanation {
+  background: rgba(59, 130, 246, 0.1);
+  border-left: 3px solid var(--color-info);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin-top: var(--space-md);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+}
+
+/* Result Page Summary */
+.df-result-summary {
+  text-align: center;
+  padding: var(--space-xl) 0;
+}
+
+.df-result-emoji {
+  font-size: 4rem;
+  margin-bottom: var(--space-md);
+  animation: float 3s ease infinite;
+  display: inline-block;
+}
+
+.df-result-score {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  margin-bottom: var(--space-sm);
+}
+
+.df-result-xp {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--gradient-fire);
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  color: white;
+}
+
+.df-result-details {
+  margin-top: var(--space-xl);
+}
+
+/* Satzstellung (Sentence Builder) */
+.df-sentence-builder .df-word-bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  min-height: 60px;
+}
+
+.df-word-chip {
+  padding: 8px 16px;
+  background: var(--bg-surface);
+  border-radius: var(--radius-full);
+  cursor: grab;
+  font-weight: 500;
+  user-select: none;
+  transition: all var(--transition-fast);
+}
+
+.df-word-chip:hover {
+  background: var(--bg-surface-hover);
+  transform: scale(1.05);
+}
+
+.df-word-chip--placed {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.df-sentence-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  min-height: 60px;
+  margin-bottom: var(--space-md);
+}
+
+/* Confetti Animation */
+.df-confetti-piece {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  top: -10px;
+  animation: confetti-fall linear forwards;
+  z-index: 2000;
+}
+
+/* Flashcards (Kelime Egzersizi) */
+.df-flashcard-container {
+  perspective: 1000px;
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  padding: var(--space-md) 0;
+}
+
+.df-flashcard {
+  width: 100%;
+  position: relative;
+  transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.df-flashcard.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.df-flashcard-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+}
+
+.df-flashcard-front {
+  justify-content: center;
+  align-items: center;
+}
+
+.df-flashcard-back {
+  transform: rotateY(180deg);
+  background: rgba(20, 20, 30, 0.85);
+}
+
+.df-fc-type-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 1px;
+}
+
+.df-fc-word {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: var(--space-xl);
+  text-align: center;
+  background: var(--gradient-hero);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.2;
+}
+
+.df-fc-inputs {
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.df-fc-input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  color: white;
+  font-size: 1rem;
+  text-align: center;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.df-fc-input:focus {
+  border-color: var(--color-b1);
+}
+
+.df-fc-back-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.df-fc-actions {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: var(--space-md);
+  margin-top: var(--space-md);
+}

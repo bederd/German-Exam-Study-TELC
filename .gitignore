@@ -1,0 +1,56 @@
+# Veritabanı ve Data Dosyaları (Telifli)
+*.db
+*.sqlite
+*.sqlite3
+data/*.json
+data/*.db
+data/deutschfit.db
+woerter_db.json
+verb_blocks.json
+clean_verb_blocks.json
+refs_debug.json
+begegnungen_*.json
+
+# Ham metin ve dokümanlar
+*.txt
+!requirements.txt
+!CMakeLists.txt
+B1/
+HÖREN/
+PDFLER/
+Son vize/
+pdf spektrum deutsch/
+*.pdf
+*.jpeg
+*.jpg
+*.png
+
+# Çevre Değişkenleri
+.env
+
+# Python İlgili Dosyalar
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+
+# Node & Frontend
+node_modules/
+.expo/
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# Agent Logları
+.agents/
+scratch/
+server.log
+server_err.log
+server_stderr.log
+server_stdout.log

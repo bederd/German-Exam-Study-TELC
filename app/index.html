@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0f0f1a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="DeutschFit">
+  <title>DeutschFit — TELC Sınav Hazırlık</title>
+  
+  <link rel="manifest" href="./manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="./css/index.css">
+  <link rel="stylesheet" href="./css/components.css">
+  <link rel="stylesheet" href="./css/exercises.css">
+</head>
+<body>
+  <div id="app" class="df-app">
+    <main id="main-content" class="df-main"></main>
+    <nav id="bottom-nav" class="df-nav">
+      <button class="df-nav__item df-nav__item--active" data-page="home">
+        <span class="df-nav__icon">🏠</span>
+        <span class="df-nav__label">Ana</span>
+      </button>
+      <button class="df-nav__item" data-page="stats">
+        <span class="df-nav__icon">📊</span>
+        <span class="df-nav__label">İstatistik</span>
+      </button>
+      <button class="df-nav__item" data-page="flashcards">
+        <span class="df-nav__icon">📇</span>
+        <span class="df-nav__label">Kelimeler</span>
+      </button>
+      <button class="df-nav__item" data-page="settings">
+        <span class="df-nav__icon">⚙️</span>
+        <span class="df-nav__label">Ayarlar</span>
+      </button>
+    </nav>
+  </div>
+  <div id="toast-container" class="df-toast-container"></div>
+  
+  <!-- Global Tooltip for Text Selection -->
+  <div id="selection-tooltip" class="df-selection-tooltip df-hidden">
+    <button onclick="DeutschFit.App.triggerWordAnalysis()">🤖 Analiz Et</button>
+  </div>
+
+  <!-- Global Modal for Word Analysis -->
+  <div id="analysis-modal" class="df-modal df-hidden">
+    <div class="df-modal-backdrop" onclick="DeutschFit.App.closeWordAnalysis()"></div>
+    <div class="df-modal-content df-card df-glass">
+      <div class="df-modal-header df-flex-between df-mb-md">
+        <h2 style="margin:0;">🤖 Kelime Analizi</h2>
+        <button class="df-btn df-btn--ghost" onclick="DeutschFit.App.closeWordAnalysis()">✕</button>
+      </div>
+      <div id="analysis-modal-body" class="df-modal-body"></div>
+    </div>
+  </div>
+
+  <script src="./js/store.js"></script>
+  <script src="./js/engine.js"></script>
+  <script src="./js/gemini.js"></script>
+  <script src="./js/ui.js"></script>
+  <script src="./js/app.js"></script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('ServiceWorker registered'))
+          .catch(err => console.error('ServiceWorker registration failed: ', err));
+      });
+    }
+  </script>
+</body>
+</html>

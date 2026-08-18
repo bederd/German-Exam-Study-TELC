@@ -1,0 +1,16 @@
+[
+  {
+    "id": 0,
+    "word_bank": [
+      "machen",
+      "lernen",
+      "sein"
+    ],
+    "text": "Hallo, ich ___ (1) Max. Ich ___ (2) jeden Tag Deutsch. Am Wochenende ___ (3) ich meine Hausaufgaben.",
+    "answers": {
+      "1": "bin",
+      "2": "lerne",
+      "3": "mache"
+    }
+  }
+]
