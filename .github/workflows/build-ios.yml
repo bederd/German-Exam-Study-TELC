@@ -28,8 +28,10 @@ jobs:
       - name: Xcode ile İmzasız Derleme Yap
         run: |
           cd mobile/ios
-          WORKSPACE=$(ls | grep .xcworkspace | head -1)
+          WORKSPACE=$(ls -d *.xcworkspace | head -n 1)
           SCHEME=$(basename "$WORKSPACE" .xcworkspace)
+          echo "Target Workspace: $WORKSPACE"
+          echo "Target Scheme: $SCHEME"
           xcodebuild -workspace "$WORKSPACE" \
                      -scheme "$SCHEME" \
                      -configuration Release \
@@ -40,6 +42,7 @@ jobs:
                      CODE_SIGN_IDENTITY="" \
                      CODE_SIGNING_PROVISIONING_PROFILE=""
           cd ..
+          rm -rf Payload app.ipa
           mkdir Payload
           cp -r ios/build/Build/Products/Release-iphoneos/*.app Payload/
           zip -r app.ipa Payload
