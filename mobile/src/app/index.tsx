@@ -45,8 +45,8 @@ export default function HomeScreen() {
         </View>
         
         <View style={styles.quickStart}>
-          <TouchableOpacity style={styles.primaryButton}>
-            <Text style={styles.primaryButtonText}>Hızlı Başla (Rastgele)</Text>
+          <TouchableOpacity style={styles.primaryButton} onPress={() => handleModuleClick('quick')}>
+            <Text style={styles.primaryButtonText}>⚡ Hızlı Sınav Simülasyonu</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

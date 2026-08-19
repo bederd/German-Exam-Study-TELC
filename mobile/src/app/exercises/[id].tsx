@@ -481,11 +481,11 @@ export default function ExerciseScreen() {
     setChecked(true);
 
     // Mark as completed
-    if (id === 'lesen' && data?.id) {
+    if (currentModule === 'lesen' && data?.id) {
       EngineService.markCompleted('lesen', data.id);
-    } else if (id === 'hoeren' && data?.[0]?.id) {
+    } else if (currentModule === 'hoeren' && data?.[0]?.id) {
       EngineService.markCompleted('hoeren', data[0].id);
-    } else if (id === 'grammatik') {
+    } else if (currentModule === 'grammatik') {
       const typeKey = `grammatik_${grammatikType}`;
       data?.forEach((q: any) => {
         if (q.id) EngineService.markCompleted(typeKey, q.id);
