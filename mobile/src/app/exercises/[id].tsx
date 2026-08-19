@@ -8,6 +8,7 @@ import { Colors } from '../../constants/Colors';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { EngineService } from '../../services/engine';
 import { GeminiService } from '../../services/gemini';
+import { WordsService } from '../../services/words';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Audio } from 'expo-av';
 
@@ -481,6 +482,23 @@ export default function ExerciseScreen() {
         Alert.alert('Hata', result.error);
       } else {
         setAnalysisResult(result.analysis);
+        try {
+          const beispiele = result.analysis['örnek_cümleler'] || result.analysis.beispiele;
+          const firstExample = beispiele && beispiele.length > 0 
+            ? (beispiele[0].sentence || beispiele[0].satz) 
+            : '';
+            
+          await WordsService.saveWord({
+            word: result.analysis.word || word,
+            type: result.analysis.type || 'Bilinmiyor',
+            meaning: result.analysis.turkce || result.analysis.ingilizce || '',
+            article: result.analysis.artikel || '',
+            plural: result.analysis.plural || '',
+            example: firstExample
+          });
+        } catch (saveError) {
+          console.error("Failed to save analyzed word:", saveError);
+        }
       }
     } catch (e: any) {
       Alert.alert('Hata', e.message);
