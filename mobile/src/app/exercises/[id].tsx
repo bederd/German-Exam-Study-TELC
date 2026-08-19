@@ -248,6 +248,11 @@ export default function ExerciseScreen() {
   const [textAnswers, setTextAnswers] = useState<Record<string, string>>({});
   const [schreibenText, setSchreibenText] = useState('');
 
+  // Quick Exam state
+  const [quickExamData, setQuickExamData] = useState<any[]>([]);
+  const [quickStep, setQuickStep] = useState(0);
+  const currentModule = id === 'quick' && quickExamData.length > 0 ? quickExamData[quickStep]?.moduleType : id;
+
   // Grammatik states
   const [grammatikType, setGrammatikType] = useState('luecke'); // 'luecke', 'konjugation', 'satzstellung', 'text-luecke'
   const [satzSelectedWords, setSatzSelectedWords] = useState<Record<string, string[]>>({});
@@ -296,7 +301,15 @@ export default function ExerciseScreen() {
       try {
         const level = 'a1';
         let exData = null;
-        if (id === 'lesen') {
+        if (id === 'quick') {
+          const quickData = await EngineService.generateQuickExam(level);
+          setQuickExamData(quickData);
+          setQuickStep(0);
+          if (quickData.length > 0) {
+            setData(quickData[0].data);
+            if (quickData[0].subType) setGrammatikType(quickData[0].subType);
+          }
+        } else if (id === 'lesen') {
           exData = await EngineService.getLesenRandom(level);
         } else if (id === 'grammatik') {
           exData = await EngineService.getGrammatik(level, 'text-luecke', 1);
@@ -305,7 +318,9 @@ export default function ExerciseScreen() {
         } else if (id === 'schreiben') {
           exData = await EngineService.getSchreiben(level);
         }
-        setData(exData);
+        if (id !== 'quick') {
+          setData(exData);
+        }
       } catch (e) {
         console.error(e);
         setError(true);
@@ -315,6 +330,31 @@ export default function ExerciseScreen() {
     };
     loadExercise();
   }, [id]);
+
+  const handleNextQuickStep = () => {
+    if (quickStep < quickExamData.length - 1) {
+      const nextStep = quickStep + 1;
+      setQuickStep(nextStep);
+      const nextItem = quickExamData[nextStep];
+      
+      setChecked(false);
+      setResults({});
+      setAnswers({});
+      setTextAnswers({});
+      setSatzSelectedWords({});
+      setSatzWordIndices({});
+      setTextLueckeAnswers({});
+      setEvalResult(null);
+      setSchreibenText('');
+      
+      setData(nextItem.data);
+      if (nextItem.subType) setGrammatikType(nextItem.subType);
+    } else {
+      Alert.alert("Tebrikler!", "Sınav simülasyonunu tamamladınız.", [
+        { text: "Ana Sayfaya Dön", onPress: () => router.push('/') }
+      ]);
+    }
+  };
 
   const handleSwitchGrammatikType = async (newType: string) => {
     if (newType === grammatikType) return;
@@ -1095,7 +1135,7 @@ export default function ExerciseScreen() {
           <Text style={styles.backBtnText}>{'<'} Geri</Text>
         </TouchableOpacity>
         <Text style={styles.title}>
-          {id === 'lesen' ? '📖 Okuma' : id === 'hoeren' ? '🎧 Dinleme' : id === 'grammatik' ? '📝 Dilbilgisi' : '✍️ Yazma'}
+          {id === 'quick' ? '⚡ Hızlı Sınav' : currentModule === 'lesen' ? '📖 Okuma' : currentModule === 'hoeren' ? '🎧 Dinleme' : currentModule === 'grammatik' ? '📝 Dilbilgisi' : '✍️ Yazma'}
         </Text>
       </View>
 
@@ -1109,10 +1149,18 @@ export default function ExerciseScreen() {
           </View>
         ) : data ? (
           <View style={styles.contentCard}>
-            {id === 'lesen' && renderLesen()}
-            {id === 'grammatik' && renderGrammatik()}
-            {id === 'hoeren' && renderHoeren()}
-            {id === 'schreiben' && renderSchreiben()}
+            {currentModule === 'lesen' && renderLesen()}
+            {currentModule === 'grammatik' && renderGrammatik()}
+            {currentModule === 'hoeren' && renderHoeren()}
+            {currentModule === 'schreiben' && renderSchreiben()}
+
+            {id === 'quick' && (
+              <TouchableOpacity style={[styles.primaryBtn, { marginTop: 20, backgroundColor: Colors.accent }]} onPress={handleNextQuickStep}>
+                <Text style={styles.primaryBtnText}>
+                  {quickStep < quickExamData.length - 1 ? 'Sonraki Soru ⏩' : 'Sınavı Bitir 🎉'}
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         ) : (
           <Text style={{ color: Colors.error }}>Veri bulunamadı.</Text>
