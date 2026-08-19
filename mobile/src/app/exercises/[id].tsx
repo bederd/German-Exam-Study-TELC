@@ -439,6 +439,18 @@ export default function ExerciseScreen() {
     });
     setResults(newResults);
     setChecked(true);
+
+    // Mark as completed
+    if (id === 'lesen' && data?.id) {
+      EngineService.markCompleted('lesen', data.id);
+    } else if (id === 'hoeren' && data?.[0]?.id) {
+      EngineService.markCompleted('hoeren', data[0].id);
+    } else if (id === 'grammatik') {
+      const typeKey = `grammatik_${grammatikType}`;
+      data?.forEach((q: any) => {
+        if (q.id) EngineService.markCompleted(typeKey, q.id);
+      });
+    }
   };
 
   const handleWordLongPress = (word: string) => {
@@ -528,6 +540,9 @@ export default function ExerciseScreen() {
         Alert.alert('Hata', result.error);
       } else {
         setEvalResult(result);
+        if (data?.id) {
+          EngineService.markCompleted('schreiben', data.id);
+        }
       }
     } catch (e: any) {
       Alert.alert('Hata', e.message);
@@ -790,9 +805,9 @@ export default function ExerciseScreen() {
               )}
 
               <View style={styles.textLueckeCard}>
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center' }}>
+                <Text style={[styles.bodyText, { lineHeight: 34 }]}>
                   {renderTextLueckeWithInputs(q)}
-                </View>
+                </Text>
               </View>
 
               {checked && q.answers && (
